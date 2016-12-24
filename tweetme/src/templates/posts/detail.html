@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% block 'title'%} {{object}} {%endblock%}
+{% block 'content'%}
+
+<div class="media">
+    <div class="media-left">
+        <a href="{{request.user.get_absolute_url}}">
+          <img class="media-object" src="{{request.user.image}}" alt="...">
+        </a>
+    </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{object.user.username|title}}</h4>
+        <p class="lead">{{object}}</p>
+          {% if object.image %}
+          <img src="{{object.image}}">
+          {% endif %}
+          <p class="media-bottom">{{object.timestamp|timesince}} | <a href="{{object.get_absolute_url}}">Link</a>
+              {% if request.user == object.user %}
+              | <a href="{% url 'posts:update' pk=object.pk %}">Edit</a> | <a href="{% url 'posts:delete' pk=object.pk %}">Delete</a>  </p>
+          {% endif %}
+      </div>
+
+</div>
+
+{%endblock%}

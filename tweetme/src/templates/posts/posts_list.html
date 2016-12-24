@@ -1,0 +1,68 @@
+{% extends 'base.html'%}
+{% block 'content'%}
+
+
+{% if user.is_anonymous %}
+    {%for obj in object_list%}
+        <div class="media">
+
+            {% if obj.privacy == 'pb' %}
+
+                <div class="media-left">
+                    <a href="{{request.user.get_absolute_url}}">
+                      <img class="media-object" src="{{request.user.image}}" alt="...">
+                    </a>
+                </div>
+              <div class="media-body">
+                <h4 class="media-heading">{{obj.user.username|title}}</h4>
+                <p class="lead">{{obj}}</p>
+                  {% if obj.image %}
+                  <img src="{{obj.image}}">
+                  {% endif %}
+                  <p class="media-bottom">{{obj.timestamp|timesince}} | <a href="{{obj.get_absolute_url}}">Link</a></p>
+              </div>
+            {% endif %}
+
+    </div>
+    {% empty %}
+    <div class="media">
+      <div class="media-body">
+        <h4 class="media-heading">No posts here</h4>
+      </div>
+    </div>
+
+    {% endfor %}
+{% else %}
+{% include 'posts/form.html' with form=form btn_value='Post' %}<hr>
+
+    {%for obj in object_list%}
+        <div class="media">
+                <div class="media-left">
+                    <a href="{{request.user.get_absolute_url}}">
+                      <img class="media-object" src="{{request.user.image}}" alt="...">
+                    </a>
+                </div>
+              <div class="media-body">
+                <h4 class="media-heading">{{obj.user.username|title}}</h4>
+                <p class="lead">{{obj}}</p>
+                  {% if obj.image %}
+                  <img src="{{obj.image}}">
+                  {% endif %}
+                  <p class="media-bottom">{{obj.timestamp|timesince}} | <a href="{{obj.get_absolute_url}}">Link</a>
+                      {% if request.user == obj.user %}
+                      | <a href="{% url 'posts:update' pk=obj.pk %}">Edit</a> | <a href="{% url 'posts:delete' pk=obj.pk %}">Delete</a>  </p>
+                  {% endif %}
+              </div>
+
+    </div>
+    {% empty %}
+    <div class="media">
+      <div class="media-body">
+        <h4 class="media-heading">No posts here</h4>
+      </div>
+    </div>
+
+    {% endfor %}
+{% endif %}
+
+{%endblock%}
