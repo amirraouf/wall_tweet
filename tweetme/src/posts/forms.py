@@ -10,7 +10,7 @@ class PostsForm(forms.ModelForm):
             'style': "height:50px"
         }
     ))
-    image = forms.ImageField(label='')
+    image = forms.ImageField(label='', required=False)
     privacy = forms.ChoiceField(label='', choices=Posts.PRIVACY, widget=forms.Select(
         attrs={
             'class': "form-control Selector col-sm-offset-10",

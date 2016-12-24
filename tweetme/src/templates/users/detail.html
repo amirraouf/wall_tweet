@@ -1,25 +1,30 @@
 {% extends 'base.html'%}
 {% block 'title'%} {{object}} {%endblock%}
 {% block 'content'%}
+<p class="page-header lead"> {{object}} </p>
+<div class="container">
+    {% for obj in object.posts.all %}
+    <div class="media">
 
-<div class="media">
-    <div class="media-left">
-        <a href="{{request.user.get_absolute_url}}">
-          <img class="media-object" src="{{request.user.image}}" alt="...">
-        </a>
+              <div class="media-body">
+                <p class="h3">{{obj}}</p>
+                  {% if obj.image %}
+                  <img src="{{obj.image}}">
+                  {% endif %}
+                  <p class="media-bottom">{{obj.timestamp|timesince}} | <a href="{{obj.get_absolute_url}}">Link</a>
+                      {% if request.user == object %}
+                      | <a href="{% url 'posts:update' pk=obj.pk %}">Edit</a> | <a href="{% url 'posts:delete' pk=obj.pk %}">Delete</a>  </p>
+                  {% endif %}
+              </div>
+
     </div>
+    {% empty %}
+    <div class="media">
       <div class="media-body">
-        <h4 class="media-heading">{{object.user.username|title}}</h4>
-        <p class="lead">{{object}}</p>
-          {% if object.image %}
-          <img src="{{object.image}}">
-          {% endif %}
-          <p class="media-bottom">{{object.timestamp|timesince}} | <a href="{{object.get_absolute_url}}">Link</a>
-              {% if request.user == object.user %}
-              | <a href="{% url 'posts:update' pk=object.pk %}">Edit</a> | <a href="{% url 'posts:delete' pk=object.pk %}">Delete</a>  </p>
-          {% endif %}
+        <h4 class="media-heading">No posts here</h4>
       </div>
-
+    </div>
+    {% endfor %}
 </div>
 
 {%endblock%}
