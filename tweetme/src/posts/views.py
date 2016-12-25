@@ -20,8 +20,6 @@ from .forms import PostsForm
 
 class PostListView(ListView):
     template_name = 'posts/posts_list.html'
-    success_url = reverse_lazy("posts:list")
-    form_class = PostsForm
 
     def get_queryset(self, *args, **kwargs):
         qs = Posts.objects.all()
@@ -43,7 +41,6 @@ class PostListView(ListView):
         return super(PostListView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # print(request)
         form = PostsForm(request.POST)
         return self.form_valid(form)
 
@@ -52,12 +49,6 @@ class PostListView(ListView):
         self.object.user = self.request.user
         form.save()
         return HttpResponseRedirect("/")
-        #
-        # def form_valid(self, form):
-        #     self.object = form.save(commit=False)
-        #     self.object.user = self.request.user
-        #     form.save()
-        #     return HttpResponseRedirect(self.success_url)
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
