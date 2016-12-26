@@ -36,8 +36,15 @@
         </div>
         <button type="Search" class="btn btn-default">Submit</button>
       </form>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+      <ul class="nav navbar-nav navbar-right">
+        {% if request.user.is_authenticated %}
+            <li><a href=" {% url 'users:profile' request.user.username %} ">{{ request.user.username|title }}</a></li>
+        {% else %}
+            <li><a href=" {% url 'users:login'%} ">Login</a></li>
+            <li><a href="{% url 'users:register'%}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+
 </nav>
     <div class="container">
       <div class="row">
