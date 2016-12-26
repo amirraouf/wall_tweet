@@ -1,8 +1,7 @@
 import hashlib, random
 
 from django.core.mail import send_mail
-from django.template import Context
-from django.template.backends.django import Template
+from django.template import Context, Template
 
 from wall.settings import EMAIL_HOST_USER, STATIC_ROOT
 
@@ -16,12 +15,12 @@ def generate_activation_key(username):
     return activation_key
 
 
-def send_activation_code_email(data):
-    link = "http://127.0.0.1:8080/activate/" + data['activation_key']
-    c = Context({'activation_link': link, 'username': data['username']})
-    f = open(STATIC_ROOT + data['email_path'], 'r')
+def send_activation_code_email(data, activation_key):
+    link = "http://127.0.0.1:8080/accounts/activate/" + str(activation_key)
+    c = Context({'activation_link': link, 'username': data.cleaned_data['username']})
+    f = open(STATIC_ROOT + '/ActivationEmail.txt', 'r')
     t = Template(f.read())
     f.close()
     message = t.render(c)
-    send_mail('Verification Code - Wall app', message, EMAIL_HOST_USER, [data['email']],
+    send_mail('Verification Code - Wall app', message, EMAIL_HOST_USER, [data.cleaned_data['email']],
               fail_silently=False)

@@ -1,12 +1,35 @@
 from django.db.models import Q
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import (
+        ListAPIView,
+        CreateAPIView,
+        UpdateAPIView,
+        DestroyAPIView,
+        RetrieveAPIView
+    )
 from rest_framework import permissions
+from rest_framework.pagination import PageNumberPagination
+
 from ..models import Posts
-from .serializers import PostModelSerializer
+from .serializers import PostModelDetailSerializer, PostModelListSerializer
+
+
+class PostRetrieveAPIView(RetrieveAPIView):
+    queryset = Posts.objects.all()
+    serializer_class = PostModelDetailSerializer
+
+
+class PostUpdateAPIView(UpdateAPIView):
+    queryset = Posts.objects.all()
+    serializer_class = PostModelDetailSerializer
+
+
+class PostDeleteAPIView(DestroyAPIView):
+    queryset = Posts.objects.all()
+    serializer_class = PostModelDetailSerializer
 
 
 class PostCreateAPIView(CreateAPIView):
-    serializer_class = PostModelSerializer
+    serializer_class = PostModelDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -17,7 +40,8 @@ class PostCreateAPIView(CreateAPIView):
 
 
 class PostListAPIView(ListAPIView):
-    serializer_class = PostModelSerializer
+    serializer_class = PostModelListSerializer
+    pagination_class = PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         qs = Posts.objects.filter(privacy='pb')

@@ -1,0 +1,2 @@
+Hello {{username}}
+Your activation code is {{activation_link}}

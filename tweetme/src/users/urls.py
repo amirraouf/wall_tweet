@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.views import login, logout
 
-from .views import ProfileView, RegisterFormView
+from .views import ProfileView, RegisterFormView, UserActivationView
 
 urlpatterns = [
     url(r'login/$', login, kwargs={'template_name': 'users/login.html',
@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^logout/$', logout, name='logout'),
     url(r'^profile/(?P<username>[\w.@+-]+)/$', ProfileView.as_view(), name='profile'),
     url(r'^signup/$', RegisterFormView.as_view(), name='register'),
+    url(r'^activate/(?P<key>.+)$', UserActivationView.as_view(), name='activation'),
 ]

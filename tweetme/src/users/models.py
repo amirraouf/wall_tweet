@@ -12,8 +12,8 @@ class User(AbstractUser):
     expiry_date = models.DateTimeField(default=None, null=True)
 
     def save(self, *args, **kwargs):
-        super(User, self).save(*args, **kwargs)
         self.slug = slugify(self.username)
+        super(User, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("users:profile", kwargs={"username": slugify(self.username)})

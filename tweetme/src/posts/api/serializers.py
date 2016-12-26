@@ -4,8 +4,20 @@ from ..models import Posts
 from users.api.serializers import UserModelSerializer
 
 
-class PostModelSerializer(serializers.ModelSerializer):
+class PostModelDetailSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only= True)
     class Meta:
         model = Posts
         fields = "__all__"
+
+
+
+class PostModelListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Posts
+        fields = [
+            'content',
+            'image',
+            'privacy',
+
+        ]
