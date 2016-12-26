@@ -26,7 +26,8 @@ SECRET_KEY = 'k5ante4=ljylzl)a94&%_n=7=@0#dgj0*wmx7q0)0l796wccg1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['walltweet.herokuapp.com']
+ALLOWED_HOSTS = ['*',
+                 'walltweet.herokuapp.com']
 
 
 # Application definition
