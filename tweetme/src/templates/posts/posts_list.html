@@ -27,8 +27,8 @@
                 <h4 class="media-heading">{{obj.user.username|title}}</h4>
             </a>
             <p class="lead">{{obj}}</p>
-              {% if obj.image %}
-              <img src="{{obj.image}}">
+              {% if obj.image != None %}
+              <img src="{{obj.image.url}}">
               {% endif %}
               <p class="media-bottom">{{obj.timestamp|timesince}} | <a href="{{obj.get_absolute_url}}">Link</a>
                 {% if request.user == obj.user %}
