@@ -5,7 +5,7 @@
 {% block 'content'%}
 
 {% if request.user.is_authenticated %}
-{% include 'posts/form.html' with form=form btn_value='update' %}
+{% include 'form.html' with form=form btn_value='update' %}
 {%else%}
 <a href="{%url 'users:login' %}">Login</a>
 {% endif %}

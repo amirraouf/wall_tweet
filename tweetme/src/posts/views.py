@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .mixins import InstanceOwnerMixin
+from .mixins import InstanceOwnerMixin, VerifiedUserMixin
 
 from django.views.generic import (
     CreateView,
@@ -20,9 +20,13 @@ from .forms import PostsForm
 
 class PostListView(ListView):
     template_name = 'posts/posts_list.html'
+    paginate_by = 8
 
     def get_queryset(self, *args, **kwargs):
-        qs = Posts.objects.all()
+        qs = Posts.objects.filter(privacy='pb')
+        if self.request.user.is_authenticated:
+            qs = Posts.objects.all()
+
         query = self.request.GET.get("q", None)
         if query is not None:
             qs = qs.filter(
@@ -35,6 +39,9 @@ class PostListView(ListView):
         context = super(PostListView, self).get_context_data(**kwargs)
         context["form"] = PostsForm
         context["success_url"] = reverse_lazy("posts:list")
+        query = self.request.GET.get("q", None)
+        if query is not None:
+            context["query"] = query
         return context
 
     def get(self, request, *args, **kwargs):
@@ -51,7 +58,7 @@ class PostListView(ListView):
         return HttpResponseRedirect("/")
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, VerifiedUserMixin, CreateView):
     form_class = PostsForm
     success_url = reverse_lazy("posts:list")
     template_name = 'posts/create.html'

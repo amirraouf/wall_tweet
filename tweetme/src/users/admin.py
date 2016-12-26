@@ -12,11 +12,9 @@ class UserAdmin(UserAdmin):
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('user_permissions', 'groups', 'is_superuser', 'slug', 'is_staff', 'last_login'),
+            'fields': ('user_permissions', 'groups', 'is_superuser', 'slug', 'is_staff', 'last_login', 'is_verified'),
         }),
     )
-
-
 
 
 admin.site.register(User, UserAdmin)

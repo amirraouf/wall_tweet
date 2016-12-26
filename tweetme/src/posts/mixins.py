@@ -18,3 +18,13 @@ class InstanceOwnerMixin(object):
 
         else:
             return HttpResponse("<h3>You don't have permission to delete this</h3>")
+
+
+class VerifiedUserMixin(object):
+
+    def form_valid(self, form):
+        if form.instance.user.is_verified:
+            return super(InstanceOwnerMixin, self).form_valid(form)
+        else:
+            form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["You have to verify your email"])
+            return self.form_invalid(form)

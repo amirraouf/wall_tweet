@@ -22,9 +22,15 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('posts.urls', namespace='posts')),
+    url(r'^api/', include('posts.api.urls', namespace='posts-api')),
     url(r'^accounts/', include('users.urls', namespace='users'))
 ]
 
 
 if settings.DEBUG:
     urlpatterns += (static(settings.STATIC_URL, document_root= settings.STATIC_ROOT))
+    import debug_toolbar
+
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+        ]
