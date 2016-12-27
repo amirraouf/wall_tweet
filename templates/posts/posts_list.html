@@ -8,7 +8,7 @@
             <p class="lead">The results for your search "{{query}}":</p><hr>
         </div>
     {% else %}
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and request.user.is_verified %}
             {% include 'form.html' with form=form btn_value='Post' %}<hr>
         {% endif %}
     {% endif %}
@@ -19,16 +19,16 @@
 
             <div class="media-left">
                 <a href="{{request.user.get_absolute_url}}">
-                  <img class="media-object" src="{{request.user.image}}" alt="...">
+                  <img class="media-object" src="{{obj.user.image}}" alt="...">
                 </a>
             </div>
             <div class="media-body">
-            <a href=" {% url 'users:profile' request.user.username %} " class="btn btn-link">
+            <a href=" {% url 'users:profile' obj.user.username %} " class="btn btn-link">
                 <h4 class="media-heading">{{obj.user.username|title}}</h4>
             </a>
             <p class="lead">{{obj}}</p>
-              {% if obj.image != None %}
-              <img src="{{obj.image.url}}">
+              {% if obj.image %}
+                <img src="{{obj.image}}" width="100px">
               {% endif %}
               <p class="media-bottom">{{obj.timestamp|timesince}} | <a href="{{obj.get_absolute_url}}">Link</a>
                 {% if request.user == obj.user %}
@@ -41,7 +41,7 @@
     <div class="media">
       <div class="media-body">
           {% if query %}
-            <h4 class="media-heading">No posts here</h4>
+            <h4 class="media-heading">No posts Found</h4>
           {% else %}
             <h4 class="media-heading">No posts here</h4>
           {% endif %}
