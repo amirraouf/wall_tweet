@@ -7,6 +7,7 @@ from wall.settings import EMAIL_HOST_USER, STATIC_ROOT
 
 
 def generate_activation_key(username):
+    """ Generate hased key based on random integer and username"""
     rand_integer = str(random.random()).encode('utf-8')
     rand = hashlib.sha1(rand_integer).hexdigest()[:5]
     username = username.encode('utf-8')
@@ -16,6 +17,7 @@ def generate_activation_key(username):
 
 
 def send_activation_code_email(data, activation_key):
+    """Send activation code email and render txt file"""
     link = "http://127.0.0.1:8080/accounts/activate/" + str(activation_key)
     c = Context({'activation_link': link, 'username': data.cleaned_data['username']})
     f = open(STATIC_ROOT + '/ActivationEmail.txt', 'r')

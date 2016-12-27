@@ -9,6 +9,11 @@ User = get_user_model()
 
 
 class UserCreationForm(AbstractUserCreationForm):
+    """
+    Override the builtin user creation form to add
+    email first_name last_name and to save
+    activation_key and expiry date
+    """
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)

@@ -3,6 +3,9 @@ from .models import Posts
 
 
 class PostsForm(forms.ModelForm):
+    """
+    PostsForm model form for tweets and used allover the posts app
+    """
     content = forms.CharField(label='', max_length=140, widget=forms.Textarea(
         attrs={
             'placeholder': "Your Post text",

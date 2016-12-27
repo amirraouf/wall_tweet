@@ -44,14 +44,16 @@ class PostListView(ListView):
             context["query"] = query
         return context
 
-    def get(self, request, *args, **kwargs):
-        return super(PostListView, self).get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         form = PostsForm(request.POST)
         return self.form_valid(form)
 
     def form_valid(self, form):
+        """
+        Form_valid is needed as List View here has a form
+        :param form:
+        :return:
+        """
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         form.save()
@@ -65,6 +67,12 @@ class PostCreateView(LoginRequiredMixin, VerifiedUserMixin, CreateView):
     login_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
+        """
+        form_valid override and save
+        the user to be instance user
+        :param form:
+        :return:
+        """
         form.instance.user = self.request.user
         return super(PostCreateView, self).form_valid(form)
 

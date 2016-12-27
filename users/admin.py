@@ -6,6 +6,10 @@ from .models import User
 
 
 class UserAdmin(UserAdmin):
+    """
+    Editing user admin panel for Advanced options
+    by adding collapse panel
+    """
     fieldsets = (
         (None, {
             'fields': ('username', 'email', 'password', 'first_name', 'last_name')

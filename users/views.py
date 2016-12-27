@@ -1,6 +1,10 @@
-
 from django.utils import timezone
-from django import http
+from django.http import (
+    HttpResponseRedirect,
+    HttpResponsePermanentRedirect,
+    HttpResponseGone,
+    )
+
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, RedirectView
@@ -33,7 +37,7 @@ class RegisterFormView(CreateView):
     def form_valid(self, form):
         super(RegisterFormView, self).form_valid(form)
         send_activation_code_email(form, form.instance.activation_key)
-        return http.HttpResponseRedirect(reverse_lazy("users:login"))
+        return HttpResponseRedirect(reverse_lazy("users:login"))
 
 
 class UserActivationView(RedirectView):
@@ -43,26 +47,19 @@ class UserActivationView(RedirectView):
     def get(self, request, **kwargs):
         user = get_object_or_404(User, activation_key=kwargs['key'])
         if not user.is_verified:
-            if timezone.now() > user.expiry_date:
-                activation_expired = True  # Display: offer the user to send a new activation link
-                id_user = user.id
-            else:  # Activation successful
+            if timezone.now() <= user.expiry_date:
                 user.is_verified = True
                 user.save()
-
-        # If user is already verified
-        else:
-            already_active = True  # Display : error message
 
         url = user.get_absolute_url()
         if url:
             if self.permanent:
-                return http.HttpResponsePermanentRedirect(url)
+                return HttpResponsePermanentRedirect(url)
             else:
-                return http.HttpResponseRedirect(url)
+                return HttpResponseRedirect(url)
         else:
             logging.getLogger('django.request').warning(
                 'Gone: %s', request.path,
                 extra={'status_code': 410, 'request': request}
             )
-            return http.HttpResponseGone()
+            return HttpResponseGone()

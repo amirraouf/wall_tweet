@@ -1,11 +1,10 @@
 
-def generate_imagename(self, imagename):
-    url = "files/users/%s/%d/%s" % (self.user.username, self.id, imagename)
+def generate_image_name(self, image_name):
+    """
+    This method for generation of
+    :param self:
+    :param image_name:
+    :return:
+    """
+    url = "media/posts/%s/%s" % (self.user.username, image_name)
     return url
-
-
-def validate_content(content):
-    if content == "":
-        from django.core.exceptions import ValidationError
-        raise ValidationError("Cannot be empty")
-    return content
