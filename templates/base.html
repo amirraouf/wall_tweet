@@ -39,6 +39,7 @@
       <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
             <li><a href=" {% url 'users:profile' request.user.username %} ">{{ request.user.username|title }}</a></li>
+            <li><a href=" {% url 'users:logout'%}?next=/ ">Logout</a></li>
         {% else %}
             <li><a href=" {% url 'users:login'%} ">Login</a></li>
             <li><a href="{% url 'users:register'%}">Sign Up</a></li>

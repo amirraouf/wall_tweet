@@ -44,8 +44,23 @@ class PostListView(ListView):
             context["query"] = query
         return context
 
+    def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instantiating the form.
+        """
+        kwargs = {
+            'instance': self.object
+        }
+
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+                'files': self.request.FILES,
+            })
+        return kwargs
+
     def post(self, request, *args, **kwargs):
-        form = PostsForm(request.POST)
+        form = PostsForm(request.POST, request.FILES)
         return self.form_valid(form)
 
     def form_valid(self, form):
@@ -56,7 +71,9 @@ class PostListView(ListView):
         """
         self.object = form.save(commit=False)
         self.object.user = self.request.user
+        form.instance.image = self.get_form_kwargs().get('files')['image']
         form.save()
+
         return HttpResponseRedirect("/")
 
 
@@ -73,6 +90,7 @@ class PostCreateView(LoginRequiredMixin, VerifiedUserMixin, CreateView):
         :param form:
         :return:
         """
+        form.instance.image = self.get_form_kwargs().get('files')['image']
         form.instance.user = self.request.user
         return super(PostCreateView, self).form_valid(form)
 
