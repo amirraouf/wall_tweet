@@ -16,7 +16,8 @@ class Posts(models.Model):
     )
 
     content     = models.CharField(max_length=140, null=False, validators=[validate_content])
-    user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, related_name='posts')
+    user        = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE,
+                                    default=1, related_name='posts')
     image       = models.ImageField(upload_to=generate_image_name, null=True, blank=True)
     privacy     = models.CharField(max_length=2, choices=PRIVACY, default='pb')
     timestamp   = models.DateTimeField(auto_now_add=True)
